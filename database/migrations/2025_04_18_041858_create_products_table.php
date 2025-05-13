@@ -12,22 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id(); // unsignedBigInteger + auto increment + primary key
+            $table->bigIncrements('id'); 
+            $table->unsignedBigInteger('product_category_id')->nullable(); 
             $table->string('name', 255); 
-            $table->string('slug', 255)->unique(); 
             $table->text('description')->nullable(); 
-            $table->string('sku', 50)->unique;
-            $table->decimal('price', 10,2)->default(0.00);
-            $table->integer('stock')->default(0);
-            $table->unsignedBigInteger('product_category_id')->nullable();
-            $table->string('image_url', 255)->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
+            $table->decimal('price', 10, 2); 
+            $table->unsignedInteger('stock')->default(0); 
+            $table->string('image')->nullable(); 
+            $table->timestamps(); 
+
+            // Foreign key constraint
             $table->foreign('product_category_id')
-                ->references('id')
-                ->on('product_categories')
-                ->onDelete('set null')
-                ->onUpdate('cascade');
+                  ->references('id')->on('product_categories')
+                  ->onDelete('set null'); // jika kategori dihapus, produk tetap ada tapi nilainya null
         });
     }
 

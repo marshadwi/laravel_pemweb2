@@ -1,11 +1,16 @@
 <?php
 
-use App\Http\Controllers\HomepageController;
-use App\Http\Controllers\ProductCategoryController;
-use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\ProductController;
 
-Route::get('/',[HomepageController::class,'index'])->name('home');
+
+
+//kode baru diubah menjadi seperti ini
+Route::get('/', [HomepageController::class, 'index'])->name('home');
 Route::get('products', [HomepageController::class, 'products']);
 Route::get('product/{slug}', [HomepageController::class, 'product']);
 Route::get('categories',[HomepageController::class, 'categories']);
@@ -13,17 +18,16 @@ Route::get('category/{slug}', [HomepageController::class, 'category']);
 Route::get('cart', [HomepageController::class, 'cart']);
 Route::get('checkout', [HomepageController::class, 'checkout']);
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::group(['prefix'=>'dashboard'], function () {
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'verified']], function() {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    // Route untuk kategori
     Route::resource('categories', ProductCategoryController::class);
-})->middleware(['auth', 'verified']);
+    // Route::get('products',[DashboardController::class,'products'])->name('products');
+    // Route resource untuk produk
+    Route::resource('products', ProductController::class);
+});
+
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');

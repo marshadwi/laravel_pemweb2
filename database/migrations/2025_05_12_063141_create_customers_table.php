@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_categories', function (Blueprint $table) {
-            $table->id();
+        Schema::create('customers', function (Blueprint $table) {
+            $table->id(); // BIGINT UNSIGNED AUTO_INCREMENT PRIMARY
             $table->string('name');
-            $table->string('slug')->unique();
-            $table->text('description')->nullable();
-            $table->string('image')->nullable();
-            $table->timestamps();
+            $table->string('email')->unique();
+            $table->text('address')->nullable();
+            $table->timestamps(); // created_at & updated_at (nullable by default)
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_categories');
+        Schema::dropIfExists('customers');
     }
 };

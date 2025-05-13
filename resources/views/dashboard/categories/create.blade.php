@@ -1,44 +1,32 @@
-<x-layouts.app :title="_('Create Product Category')">
-    <flux:heading>Create Product Category</flux:heading>
-    <flux:description>
-        Fill i the details to create a new peoduct category.
-    </flux:description>
-    <flux:separator variant="subtle"/>
+<x-layouts.app :title="__('Categories')">
+    <div class="relative mb-6 w-full">
+        <flux:heading size="xl">Add New Product Categories</flux:heading>
+        <flux:subheading size="lg" class="mb-6">Manage data Product Categories</flux:heading>
+        <flux:separator variant="subtle" />
+    </div>
 
-    <form 
-        action="{{ route('categories.store') }}">
-        method="POST"
-        enctype="multipart/form-data">
+    @if(session()->has('successMessage'))
+        <flux:badge color="lime" class="mb-3 w-full">{{session()->get('successMessage')}}</flux:badge>
+    @elseif(session()->has('errorMessage'))
+        <flux:badge color="red" class="mb-3 w-full">{{session()->get('errorMessage')}}</flux:badge>
+    @endif
+
+    <form action="{{ route('categories.store') }}" method="post" enctype="multipart/form-data">
         @csrf
         
-        <flux:input name="name" label="Name" placeholder="Enter name"
-            required 
-            class="mb-4"
-            value="{{ old('name') }}" />
+        <flux:input label="Name" name="name" class="mb-3" />
 
-        <flux:input name="slug" label="Slug" placeholder="Enter slug"
-            required 
-            class="mb-4"
-            value="{{ old('slug') }}" />
+        <flux:input label="Slug" name="slug" class="mb-3" />
 
-        <flux:input name="description" label="Description" 
-            placeholder="Enter description"
-            required 
-            class="mb-4"
-            value="{{ old('description') }}" />
+        <flux:textarea label="Description" name="description" class="mb-3" />
 
-        <flux:input name="image" label="Image"
-            type="file" 
-            accept="image/*"
-            value="{{ old('name') }}" />
+        <flux:input type="file" label="Image" name="image" class="mb-3" />
 
-        <flux:button
-            type="submit"
-            variant="primary"
-            class="mt-4">
-            Save
-        </flux:button>
+        <flux:separator />
 
-        
+        <div class="mt-4">
+            <flux:button type="submit" variant="primary">Simpan</flux:button>
+            <flux:link href="{{ route('categories.index') }}" variant="ghost" class="ml-3">Kembali</flux:link>
+        </div>
     </form>
 </x-layouts.app>
